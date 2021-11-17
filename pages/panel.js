@@ -2,7 +2,6 @@ import { useContext, useEffect } from "react";
 import { AuthContext } from "../components/AuthContext";
 import Router from "next/router";
 import ContentTable from "../components/ContentTable";
-import Cookies from "js-cookie";
 
 const Panel = (props) => {
   const { token } = useContext(AuthContext);
@@ -27,6 +26,14 @@ export const getServerSideProps = async (context) => {
       `https://front-api-test.wsafar.com/posts?access-token=${req.cookies["token-giti"]}`
     );
     data = await res.json();
+  }
+  if (!data.ok) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
   }
   return {
     props: { data, cookies: req.cookies },
