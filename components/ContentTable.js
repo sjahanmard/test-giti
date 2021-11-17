@@ -89,6 +89,16 @@ export default function ContentTable() {
       });
     }
   };
+  const handleNoSearch = async (e) => {
+    if (e.target.value === "") {
+      await axios
+        .get(`https://front-api-test.wsafar.com/posts?access-token=${token}`)
+        .then((res) => {
+          setItems(res.data.result);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
 
   return (
     <Container>
@@ -110,6 +120,7 @@ export default function ContentTable() {
               type="search"
               variant="filled"
               size="small"
+              onChange={handleNoSearch}
             />
           </Grid>
           <Grid item>
