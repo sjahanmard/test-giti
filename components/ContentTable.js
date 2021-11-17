@@ -15,18 +15,12 @@ import { Box } from "@mui/system";
 import { SettingsInputAntennaTwoTone } from "@material-ui/icons";
 import { DataGrid } from "@mui/x-data-grid";
 
-export default function ContentTable() {
+export default function ContentTable(props) {
   const { token } = React.useContext(AuthContext);
   const [items, setItems] = React.useState({ items: [] });
   const [page, setPage] = React.useState(1);
-
   React.useEffect(async () => {
-    await axios
-      .get(`https://front-api-test.wsafar.com/posts?access-token=${token}`)
-      .then((res) => {
-        setItems(res.data.result);
-      })
-      .catch((err) => console.log(err));
+    setItems(props.data?.result);
   }, [token]);
   React.useEffect(async () => {
     await axios
