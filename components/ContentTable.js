@@ -55,7 +55,7 @@ export default function ContentTable() {
     e.preventDefault();
     let data = [];
     let data1 = [];
-    let formData = new FormData(e.target).get("search");
+    let formData = e.target.value;
     console.log(formData);
     if (formData === "") {
       console.log("karbala1");
@@ -70,7 +70,7 @@ export default function ContentTable() {
       console.log("karbala2");
       await axios
         .get(
-          `https://front-api-test.wsafar.com/posts?access-token=${token}&filter[title]=${formData}`
+          `https://front-api-test.wsafar.com/posts?access-token=${token}&filter[title][like]=${formData}`
         )
         .then((res) => {
           data = res.data.result.items;
@@ -78,7 +78,7 @@ export default function ContentTable() {
         .catch((err) => console.log(err));
       await axios
         .get(
-          `https://front-api-test.wsafar.com/posts?access-token=${token}&filter[content]=${formData}`
+          `https://front-api-test.wsafar.com/posts?access-token=${token}&filter[content][like]=${formData}`
         )
         .then((res) => {
           data1 = res.data.result.items;
@@ -89,53 +89,41 @@ export default function ContentTable() {
       });
     }
   };
-  const handleNoSearch = async (e) => {
-    if (e.target.value === "") {
-      await axios
-        .get(`https://front-api-test.wsafar.com/posts?access-token=${token}`)
-        .then((res) => {
-          setItems(res.data.result);
-        })
-        .catch((err) => console.log(err));
-    }
-  };
 
   return (
     <Container>
-      <form onSubmit={handleSearch}>
-        <Grid
-          container
-          spacing={2}
-          alignItems="center"
-          justifyContent="center"
-          marginTop={1}
-          marginBottom={1}
-        >
-          <Grid item>
-            {" "}
-            <TextField
-              id="search"
-              name="search"
-              label="Search"
-              type="search"
-              variant="filled"
-              size="small"
-              onChange={handleNoSearch}
-            />
-          </Grid>
-          <Grid item>
-            {" "}
-            <Button
-              type="submit"
-              variant="contained"
-              size="large"
-              color="secondary"
-            >
-              Search
-            </Button>
-          </Grid>
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        justifyContent="center"
+        marginTop={1}
+        marginBottom={1}
+      >
+        <Grid item>
+          {" "}
+          <TextField
+            id="search"
+            name="search"
+            label="Search"
+            type="search"
+            variant="filled"
+            size="small"
+            onChange={handleSearch}
+          />
         </Grid>
-      </form>
+        <Grid item>
+          {" "}
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            color="secondary"
+          >
+            Search
+          </Button>
+        </Grid>
+      </Grid>
       <div style={{ height: "82vh", width: "100%" }}>
         <DataGrid
           rows={items?.items}
